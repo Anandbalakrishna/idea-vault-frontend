@@ -9,7 +9,7 @@ const IdeaVault = () => {
   const [newIdea, setNewIdea] = useState({ title: '', description: '', category: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState('ideas');
+  const [activeTab, setActiveTab] = useState('submit');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
