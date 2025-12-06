@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lightbulb, Send, Sparkles, TrendingUp, Brain, Shield, AlertCircle } from 'lucide-react';
+import { Lightbulb, Send, Sparkles, TrendingUp, Shield, AlertCircle, Database } from 'lucide-react';
 
 // Change this to your Render.com backend URL after deployment
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
@@ -9,11 +9,15 @@ const IdeaVault = () => {
   const [newIdea, setNewIdea] = useState({ title: '', description: '', category: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState('submit');
+  const [activeTab, setActiveTab] = useState('ideas');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load ideas from Google Sheets on mount
+  // Load ideas from Google Sheets on mount and when switching to ideas tab
+  useEffect(() => {
+    loadIdeas();
+  }, []);
+
   useEffect(() => {
     if (activeTab === 'ideas') {
       loadIdeas();
@@ -68,7 +72,7 @@ const IdeaVault = () => {
       const submittedIdea = await response.json();
 
       // Add to local state
-      setIdeas([...ideas, submittedIdea]);
+      setIdeas([submittedIdea, ...ideas]);
 
       // Clear form
       setNewIdea({ title: '', description: '', category: '' });
@@ -228,7 +232,10 @@ const IdeaVault = () => {
                 <Shield className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-300">Your submission is completely anonymous. We value all ideas!</p>
-                  <p className="text-xs text-gray-500 mt-1">💾 Ideas are saved to Google Sheets</p>
+                  <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                    <Database className="w-3 h-3" />
+                    Ideas are saved to Google Sheets
+                  </p>
                 </div>
               </div>
             </div>
@@ -277,6 +284,13 @@ const IdeaVault = () => {
                 />
               </div>
 
+              {showSuccess && (
+                <div className="bg-gradient-to-r from-green-500 to-emerald-500 border border-green-400 rounded-lg p-4 text-white text-sm font-medium flex items-center gap-2 shadow-lg">
+                  <span className="text-white text-lg">✓</span>
+                  Your idea has been submitted anonymously!
+                </div>
+              )}
+
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
@@ -294,13 +308,6 @@ const IdeaVault = () => {
                   </>
                 )}
               </button>
-
-              {showSuccess && (
-                <div className="bg-green-900/30 border border-green-600/50 rounded-lg p-4 text-green-400 text-sm font-medium flex items-center gap-2">
-                  <span className="text-green-400 text-lg">✓</span>
-                  Idea saved to Google Sheets! Switch to "All Ideas" to see it.
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -344,7 +351,7 @@ const IdeaVault = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {ideas.slice().reverse().map((idea) => (
+                    {ideas.map((idea) => (
                       <div key={idea.id} className="bg-gray-900 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-all">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
