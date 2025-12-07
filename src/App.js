@@ -158,9 +158,9 @@ const IdeaVault = () => {
   ];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#252623' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#212121' }}>
       {/* Header */}
-      <div className="border-b border-gray-800 sticky top-0 z-10" style={{ backgroundColor: '#252623' }}>
+      <div className="border-b border-gray-800 sticky top-0 z-10" style={{ backgroundColor: '#212121' }}>
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -248,7 +248,7 @@ const IdeaVault = () => {
                   onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
                   placeholder="A catchy title for your idea"
                   className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500" style={{ backgroundColor: "#252623" }} focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
-                  style={{ backgroundColor: '#252623' }}
+                  style={{ backgroundColor: '#212121' }}
                 />
               </div>
 
@@ -260,7 +260,7 @@ const IdeaVault = () => {
                   value={newIdea.category}
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
                   className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
-                  style={{ backgroundColor: '#252623' }}
+                  style={{ backgroundColor: '#212121' }}
                 >
                   <option value="" className="text-gray-400">Select a category</option>
                   {categories.map(cat => (
@@ -279,7 +279,7 @@ const IdeaVault = () => {
                   placeholder="What's your idea? How would it work? What problem does it solve? No idea is too wild - share freely!"
                   rows="6"
                   className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500" style={{ backgroundColor: "#252623" }} focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all resize-none" style={{ backgroundColor: "#252623" }}
-                  style={{ backgroundColor: '#252623' }}
+                  style={{ backgroundColor: '#212121' }}
                 />
               </div>
 
