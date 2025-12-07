@@ -4,19 +4,6 @@ import { Lightbulb, Send, Sparkles, TrendingUp, Shield, AlertCircle, Database } 
 // Change this to your backend URL after deployment
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-// Add custom CSS for select placeholder
-const customStyles = `
-  select option[value=""] {
-    color: #6b7280;
-  }
-  select:invalid {
-    color: #6b7280;
-  }
-  select:valid {
-    color: white;
-  }
-`;
-
 const IdeaVault = () => {
   const [ideas, setIdeas] = useState([]);
   const [newIdea, setNewIdea] = useState({ title: '', description: '', category: '' });
@@ -170,9 +157,7 @@ const IdeaVault = () => {
   ];
 
   return (
-    <>
-      <style>{customStyles}</style>
-      <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black">
       {/* Header */}
       <div className="border-b border-gray-800 bg-black sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4">
@@ -273,10 +258,10 @@ const IdeaVault = () => {
                 <select
                   value={newIdea.category}
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
-                  required={false}
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
+                  style={{ color: newIdea.category ? 'white' : '#9ca3af' }}
                 >
-                  <option value="">Select a category</option>
+                  <option value="" disabled hidden>Select a category</option>
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
@@ -475,7 +460,6 @@ const IdeaVault = () => {
         )}
       </div>
     </div>
-    </>
   );
 };
 
