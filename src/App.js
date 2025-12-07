@@ -158,9 +158,9 @@ const IdeaVault = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: '#2b2b2b' }}>
       {/* Header */}
-      <div className="border-b border-gray-800 bg-black sticky top-0 z-10">
+      <div className="border-b border-gray-800 sticky top-0 z-10" style={{ backgroundColor: '#2b2b2b' }}>
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -260,7 +260,7 @@ const IdeaVault = () => {
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
                 >
-                  <option value="">Select a category</option>
+                  <option value="" className="text-gray-400">Select a category</option>
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
