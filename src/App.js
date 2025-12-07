@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lightbulb, Send, Sparkles, TrendingUp, Shield, AlertCircle, Database } from 'lucide-react';
 
-// Change this to your Render.com backend URL after deployment
+// Change this to your backend URL after deployment
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 const IdeaVault = () => {
@@ -13,7 +13,7 @@ const IdeaVault = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load ideas from Google Sheets on mount and when switching to ideas tab
+  // Load ideas from Google Sheets on mount and when switching tabs
   useEffect(() => {
     loadIdeas();
   }, []);
@@ -100,7 +100,6 @@ const IdeaVault = () => {
         },
         body: JSON.stringify({
           id: idea.id,
-          rowNumber: idea.rowNumber,
           title: idea.title,
           description: idea.description,
           category: idea.category
@@ -158,9 +157,9 @@ const IdeaVault = () => {
   ];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#252623' }}>
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <div className="border-b border-gray-800 sticky top-0 z-10" style={{ backgroundColor: '#252623' }}>
+      <div className="border-b border-gray-800 bg-black sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -227,11 +226,12 @@ const IdeaVault = () => {
         {activeTab === 'submit' && (
           <div className="space-y-6">
             {/* Info Banner */}
-            <div className="border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#252623" }}>
+            <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-300">Your submission is completely anonymous. We value all ideas!</p>
+                  
                 </div>
               </div>
             </div>
@@ -247,8 +247,7 @@ const IdeaVault = () => {
                   value={newIdea.title}
                   onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
                   placeholder="A catchy title for your idea"
-                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500" style={{ backgroundColor: "#252623" }} focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
-                  style={{ backgroundColor: '#252623' }}
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
                 />
               </div>
 
@@ -259,8 +258,7 @@ const IdeaVault = () => {
                 <select
                   value={newIdea.category}
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
-                  style={{ backgroundColor: '#252623' }}
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
                 >
                   <option value="" className="text-gray-400">Select a category</option>
                   {categories.map(cat => (
@@ -278,8 +276,7 @@ const IdeaVault = () => {
                   onChange={(e) => setNewIdea({ ...newIdea, description: e.target.value })}
                   placeholder="What's your idea? How would it work? What problem does it solve? No idea is too wild - share freely!"
                   rows="6"
-                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500" style={{ backgroundColor: "#252623" }} focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all resize-none" style={{ backgroundColor: "#252623" }}
-                  style={{ backgroundColor: '#252623' }}
+                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all resize-none"
                 />
               </div>
 
@@ -298,7 +295,7 @@ const IdeaVault = () => {
                 {isSubmitting ? (
                   <>
                     <Sparkles className="w-5 h-5 animate-spin" />
-                    Idea Submitting...
+                    Saving to Google Sheets...
                   </>
                 ) : (
                   <>
@@ -329,7 +326,7 @@ const IdeaVault = () => {
                   </div>
                   <button
                     onClick={reevaluateAll}
-                    className="px-4 py-2 border" style={{ backgroundColor: "#252623" }} border-gray-600 text-white rounded-lg hover:bg-gray-800 text-sm font-medium flex items-center gap-2 transition-all"
+                    className="px-4 py-2 bg-gray-900 border border-gray-600 text-white rounded-lg hover:bg-gray-800 text-sm font-medium flex items-center gap-2 transition-all"
                   >
                     <Sparkles className="w-4 h-4" />
                     Re-evaluate All
@@ -351,12 +348,12 @@ const IdeaVault = () => {
                 ) : (
                   <div className="space-y-4">
                     {ideas.map((idea) => (
-                      <div key={idea.id} className="border border-gray-700 rounded-lg p-6" style={{ backgroundColor: "#252623" }} hover:border-gray-600 transition-all">
+                      <div key={idea.id} className="bg-gray-900 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-all">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold text-white mb-2">{idea.title}</h3>
                             {idea.category && (
-                              <span className="inline-block px-3 py-1 text-orange-400" style={{ backgroundColor: "#252623" }} rounded-full text-xs font-medium border border-orange-500/20">
+                              <span className="inline-block px-3 py-1 bg-gray-800 text-orange-400 rounded-full text-xs font-medium border border-orange-500/20">
                                 {idea.category}
                               </span>
                             )}
@@ -377,19 +374,19 @@ const IdeaVault = () => {
 
                             {/* Scores */}
                             <div className="grid grid-cols-4 gap-3">
-                              <div className="border border-gray-700 rounded-lg p-3" style={{ backgroundColor: "#252623" }} text-center">
+                              <div className="bg-gray-800 border border-gray-700 rounded-lg p-3 text-center">
                                 <div className={`text-2xl font-bold ${getScoreColor(idea.aiEvaluation.innovationScore)}`}>
                                   {idea.aiEvaluation.innovationScore}
                                 </div>
                                 <div className="text-xs text-gray-400 mt-1">Innovation</div>
                               </div>
-                              <div className="border border-gray-700 rounded-lg p-3" style={{ backgroundColor: "#252623" }} text-center">
+                              <div className="bg-gray-800 border border-gray-700 rounded-lg p-3 text-center">
                                 <div className={`text-2xl font-bold ${getScoreColor(idea.aiEvaluation.feasibilityScore)}`}>
                                   {idea.aiEvaluation.feasibilityScore}
                                 </div>
                                 <div className="text-xs text-gray-400 mt-1">Feasibility</div>
                               </div>
-                              <div className="border border-gray-700 rounded-lg p-3" style={{ backgroundColor: "#252623" }} text-center">
+                              <div className="bg-gray-800 border border-gray-700 rounded-lg p-3 text-center">
                                 <div className={`text-2xl font-bold ${getScoreColor(idea.aiEvaluation.impactScore)}`}>
                                   {idea.aiEvaluation.impactScore}
                                 </div>
@@ -403,7 +400,7 @@ const IdeaVault = () => {
                               </div>
                             </div>
 
-                            <div className="border border-gray-700 rounded-lg p-3" style={{ backgroundColor: "#252623" }}">
+                            <div className="bg-gray-800 border border-gray-700 rounded-lg p-3">
                               <p className="text-sm text-gray-300 leading-relaxed">{idea.aiEvaluation.summary}</p>
                             </div>
 
