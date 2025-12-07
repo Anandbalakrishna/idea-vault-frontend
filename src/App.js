@@ -14,6 +14,10 @@ const IdeaVault = () => {
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState('short'); // 'short' or 'full'
   const [expandedCards, setExpandedCards] = useState(new Set()); // Track individually expanded cards
+  const [showFilters, setShowFilters] = useState(false); // Toggle filter panel
+  const [sortBy, setSortBy] = useState('newest'); // 'newest', 'highest', 'innovative', 'feasible'
+  const [filterCategory, setFilterCategory] = useState(''); // Category filter
+  const [filterScore, setFilterScore] = useState(''); // Score range filter
 
   // Load ideas from Google Sheets on mount and when switching tabs
   useEffect(() => {
@@ -158,6 +162,59 @@ const IdeaVault = () => {
   const handleViewModeChange = (mode) => {
     setViewMode(mode);
     setExpandedCards(new Set()); // Clear individual expansions when switching view modes
+  };
+
+  const getFilteredAndSortedIdeas = () => {
+    let filtered = [...ideas];
+
+    // Apply category filter
+    if (filterCategory) {
+      filtered = filtered.filter(idea => idea.category === filterCategory);
+    }
+
+    // Apply score filter
+    if (filterScore && filterScore !== 'all') {
+      filtered = filtered.filter(idea => {
+        if (!idea.aiEvaluation) return false;
+        const score = idea.aiEvaluation.overallScore;
+        if (filterScore === 'high') return score >= 8;
+        if (filterScore === 'medium') return score >= 5 && score < 8;
+        if (filterScore === 'low') return score < 5;
+        if (filterScore === 'pending') return !idea.aiEvaluation;
+        return true;
+      });
+    }
+
+    // Apply sorting
+    if (sortBy === 'newest') {
+      filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    } else if (sortBy === 'highest') {
+      filtered.sort((a, b) => {
+        const scoreA = a.aiEvaluation?.overallScore || 0;
+        const scoreB = b.aiEvaluation?.overallScore || 0;
+        return scoreB - scoreA;
+      });
+    } else if (sortBy === 'innovative') {
+      filtered.sort((a, b) => {
+        const scoreA = a.aiEvaluation?.innovationScore || 0;
+        const scoreB = b.aiEvaluation?.innovationScore || 0;
+        return scoreB - scoreA;
+      });
+    } else if (sortBy === 'feasible') {
+      filtered.sort((a, b) => {
+        const scoreA = a.aiEvaluation?.feasibilityScore || 0;
+        const scoreB = b.aiEvaluation?.feasibilityScore || 0;
+        return scoreB - scoreA;
+      });
+    }
+
+    return filtered;
+  };
+
+  const clearFilters = () => {
+    setFilterCategory('');
+    setFilterScore('');
+    setSortBy('newest');
   };
 
   const renderKPICards = (idea) => {
@@ -361,50 +418,108 @@ const IdeaVault = () => {
             ) : (
               <>
                 {/* Filter Bar with View Toggle */}
-                <div className="flex items-center gap-3 mb-4 flex-wrap">
-                  <div className="text-sm text-gray-400">
-                    <strong className="text-white text-xl mr-2">{ideas.length}</strong> ideas
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <div className="text-sm text-gray-400">
+                      <strong className="text-white text-xl mr-2">{getFilteredAndSortedIdeas().length}</strong> ideas
+                    </div>
+                    
+                    <button 
+                      onClick={() => setShowFilters(!showFilters)}
+                      className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm hover:border-orange-500 transition-all flex items-center gap-2"
+                    >
+                      <span>🔍</span>
+                      <span>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                    </button>
+                    
+                    <select 
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm"
+                    >
+                      <option value="newest">Newest First</option>
+                      <option value="highest">Highest Score</option>
+                      <option value="innovative">Most Innovative</option>
+                      <option value="feasible">Most Feasible</option>
+                    </select>
+                    
+                    <button 
+                      onClick={() => handleViewModeChange('short')}
+                      className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'short' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
+                    >
+                      <span style={{fontSize: '16px'}}>▤</span>
+                      <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Short View
+                      </span>
+                    </button>
+                    
+                    <button 
+                      onClick={() => handleViewModeChange('full')}
+                      className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'full' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
+                    >
+                      <span style={{fontSize: '16px'}}>☰</span>
+                      <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Full View
+                      </span>
+                    </button>
+                    
+                    <button 
+                      onClick={reevaluateAll}
+                      className="ml-auto px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Re-evaluate All
+                    </button>
                   </div>
-                  
-                  <button className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm hover:border-orange-500 transition-all flex items-center gap-2">
-                    <span>🔍</span>
-                    <span>Show Filters</span>
-                  </button>
-                  
-                  <select className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm">
-                    <option>Newest First</option>
-                    <option>Highest Score</option>
-                    <option>Most Innovative</option>
-                    <option>Most Feasible</option>
-                  </select>
-                  
-                  <button 
-                    onClick={() => handleViewModeChange('short')}
-                    className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'short' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
-                  >
-                    <span style={{fontSize: '16px'}}>▤</span>
-                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      Short View
-                    </span>
-                  </button>
-                  
-                  <button 
-                    onClick={() => handleViewModeChange('full')}
-                    className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'full' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
-                  >
-                    <span style={{fontSize: '16px'}}>☰</span>
-                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      Full View
-                    </span>
-                  </button>
-                  
-                  <button 
-                    onClick={reevaluateAll}
-                    className="ml-auto px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-medium hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-2"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    Re-evaluate All
-                  </button>
+
+                  {/* Collapsible Filter Panel */}
+                  {showFilters && (
+                    <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-2 uppercase font-semibold">Category</label>
+                          <select
+                            value={filterCategory}
+                            onChange={(e) => setFilterCategory(e.target.value)}
+                            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm"
+                          >
+                            <option value="">All Categories</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Process Improvement">Process Improvement</option>
+                            <option value="Cost Savings">Cost Savings</option>
+                            <option value="Customer Experience">Customer Experience</option>
+                            <option value="Employee Experience">Employee Experience</option>
+                            <option value="Product Innovation">Product Innovation</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-2 uppercase font-semibold">Score Range</label>
+                          <select
+                            value={filterScore}
+                            onChange={(e) => setFilterScore(e.target.value)}
+                            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm"
+                          >
+                            <option value="">All Scores</option>
+                            <option value="high">High Impact (8-10)</option>
+                            <option value="medium">Medium (5-7)</option>
+                            <option value="low">Needs Work (1-4)</option>
+                            <option value="pending">Not Evaluated</option>
+                          </select>
+                        </div>
+
+                        <div className="flex items-end">
+                          <button
+                            onClick={clearFilters}
+                            className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-gray-400 text-sm hover:border-gray-500 hover:text-white transition-all"
+                          >
+                            Clear All Filters
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {ideas.length === 0 ? (
@@ -421,7 +536,7 @@ const IdeaVault = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {ideas.map((idea) => {
+                    {getFilteredAndSortedIdeas().map((idea) => {
                       const isExpanded = expandedCards.has(idea.id);
                       const showFull = viewMode === 'full' || isExpanded;
                       
