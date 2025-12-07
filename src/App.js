@@ -100,6 +100,7 @@ const IdeaVault = () => {
         },
         body: JSON.stringify({
           id: idea.id,
+          rowNumber: idea.rowNumber,  // ← ADD THIS LINE
           title: idea.title,
           description: idea.description,
           category: idea.category
