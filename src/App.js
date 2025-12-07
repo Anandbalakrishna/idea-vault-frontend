@@ -155,6 +155,11 @@ const IdeaVault = () => {
     });
   };
 
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+    setExpandedCards(new Set()); // Clear individual expansions when switching view modes
+  };
+
   const renderKPICards = (idea) => {
     if (!idea.aiEvaluation) return null;
     
@@ -351,7 +356,7 @@ const IdeaVault = () => {
             {isLoading ? (
               <div className="text-center py-16">
                 <Sparkles className="w-8 h-8 animate-spin mx-auto mb-4 text-orange-500" />
-                <p className="text-gray-400">Loading ideas from Google Sheets...</p>
+                <p className="text-gray-400">Loading ideas...</p>
               </div>
             ) : (
               <>
@@ -374,19 +379,23 @@ const IdeaVault = () => {
                   </select>
                   
                   <button 
-                    onClick={() => setViewMode('short')}
-                    className={`px-3 py-2 border rounded-lg text-sm transition-all ${viewMode === 'short' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
-                    title="Short View"
+                    onClick={() => handleViewModeChange('short')}
+                    className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'short' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
                   >
                     <span style={{fontSize: '16px'}}>▤</span>
+                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Short View
+                    </span>
                   </button>
                   
                   <button 
-                    onClick={() => setViewMode('full')}
-                    className={`px-3 py-2 border rounded-lg text-sm transition-all ${viewMode === 'full' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
-                    title="Full View"
+                    onClick={() => handleViewModeChange('full')}
+                    className={`px-3 py-2 border rounded-lg text-sm transition-all relative group ${viewMode === 'full' ? 'bg-orange-500 border-orange-500 text-white' : 'bg-gray-700 border-gray-600 text-white hover:border-orange-500'}`}
                   >
                     <span style={{fontSize: '16px'}}>☰</span>
+                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Full View
+                    </span>
                   </button>
                   
                   <button 
