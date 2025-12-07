@@ -296,7 +296,7 @@ const IdeaVault = () => {
                 {isSubmitting ? (
                   <>
                     <Sparkles className="w-5 h-5 animate-spin" />
-                    Saving to Google Sheets...
+                    Idea Submitting...
                   </>
                 ) : (
                   <>
@@ -323,7 +323,7 @@ const IdeaVault = () => {
                 <div className="flex items-center justify-between bg-gray-900 border border-gray-700 rounded-lg p-4">
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-white">{ideas.length}</span>
-                    <span className="text-sm text-gray-400">ideas in Google Sheets</span>
+                    <span className="text-sm text-gray-400">All Ideas</span>
                   </div>
                   <button
                     onClick={reevaluateAll}
