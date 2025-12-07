@@ -260,7 +260,7 @@ const IdeaVault = () => {
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
                 >
-                  <option value="" className="text-gray-400">Select a category</option>
+                  <option value="" style={{ color: '#6b7280' }}>Select a category</option>
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
