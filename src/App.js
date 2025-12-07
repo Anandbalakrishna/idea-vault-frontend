@@ -315,7 +315,7 @@ const IdeaVault = () => {
             {isLoading ? (
               <div className="text-center py-16">
                 <Sparkles className="w-8 h-8 animate-spin mx-auto mb-4 text-orange-500" />
-                <p className="text-gray-400">Loading ideas from Google Sheets...</p>
+                <p className="text-gray-400">Loading ideas...</p>
               </div>
             ) : (
               <>
@@ -323,7 +323,7 @@ const IdeaVault = () => {
                 <div className="flex items-center justify-between bg-gray-900 border border-gray-700 rounded-lg p-4">
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-white">{ideas.length}</span>
-                    <span className="text-sm text-gray-400">All Ideas</span>
+                    <span className="text-sm text-gray-400">Ideas</span>
                   </div>
                   <button
                     onClick={reevaluateAll}
