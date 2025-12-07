@@ -247,7 +247,8 @@ const IdeaVault = () => {
                   value={newIdea.title}
                   onChange={(e) => setNewIdea({ ...newIdea, title: e.target.value })}
                   placeholder="A catchy title for your idea"
-                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
+                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
+                  style={{ backgroundColor: '#2d2d2d' }}
                 />
               </div>
 
@@ -258,7 +259,8 @@ const IdeaVault = () => {
                 <select
                   value={newIdea.category}
                   onChange={(e) => setNewIdea({ ...newIdea, category: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
+                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all"
+                  style={{ backgroundColor: '#2d2d2d' }}
                 >
                   <option value="" className="text-gray-400">Select a category</option>
                   {categories.map(cat => (
@@ -276,7 +278,8 @@ const IdeaVault = () => {
                   onChange={(e) => setNewIdea({ ...newIdea, description: e.target.value })}
                   placeholder="What's your idea? How would it work? What problem does it solve? No idea is too wild - share freely!"
                   rows="6"
-                  className="w-full px-4 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all resize-none"
+                  className="w-full px-4 py-2.5 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 focus:outline-none transition-all resize-none"
+                  style={{ backgroundColor: '#2d2d2d' }}
                 />
               </div>
 
